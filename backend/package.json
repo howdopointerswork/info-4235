@@ -1,0 +1,27 @@
+{
+  "name": "info-4235",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jquery": "^4.0.0",
+    "prisma": "^5.22.0"
+  },
+  "devDependencies": {
+    "@types/jquery": "^4.0.1",
+    "@types/node": "^25.9.3",
+    "nodemon": "^3.1.14",
+    "typescript": "^6.0.3"
+  }
+}

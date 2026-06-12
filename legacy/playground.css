@@ -1,0 +1,52 @@
+#title{
+	color: black;
+	text-align: center;
+}
+
+body{
+
+	color: black;
+}
+
+nav{
+	ul{
+		display: flex;
+		justify-content: center;
+		list-style-type: none;
+		border-bottom: 2px solid black;
+
+		li{
+
+			padding: 0.5em;
+			margin: 0.5em;
+			border: 2px solid black;
+			border-radius: 8px;
+
+			a{
+
+				text-decoration: none;
+				font-size: 18px;
+				color: black;
+			}
+
+			a:hover{
+				color: #00FF00;
+			}
+		}
+
+	}
+}
+
+
+main{
+
+	display: flex;
+	justify-content: center;	
+	flex-direction: column;
+	text-align: center;
+	width: 25%;
+	margin: 0 auto;
+	font-size: 18px;
+
+	
+}
