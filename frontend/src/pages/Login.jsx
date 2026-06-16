@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Login(){
+
+	const navigate = useNavigate();
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -25,7 +29,15 @@ function Login(){
 
 		);
 
-		const res = await response.json();
+		const res = await resp.json();
+
+		if(res.success){
+			console.log("YES");
+			navigate("/home");
+		}else{
+
+			console.log("NO");
+		}
 	}
 
 

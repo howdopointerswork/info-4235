@@ -13,6 +13,49 @@ ex.use(cors());
 ex.use(express.static(__dirname));
 ex.use(express.json());
 
+
+ex.post('/login', async (req, res) => {
+
+	const { username, password } = req.body;
+
+	try{
+
+		const user = await prisma.User.findFirst({
+			where: { username }
+		});
+	
+		if(!user){
+			console.log("not found");
+			res.json({ success: false,
+				user });
+			//sign up here
+		}else{
+			console.log("found");
+			if(user.password != password){
+				console.log("invalid credentials");
+				res.json({ success: false,
+					user });
+			}else{
+				console.log("success!");
+
+				res.json({ success: true,
+					user });
+					
+			}
+		}
+
+		res.json(user);
+
+	}catch(e){
+		res.status(500).json({ e: 'Error getting data' });
+	}
+
+
+
+
+});
+
+
 ex.get('/User/username/:username', async (req, res) => {
 
 	const username = req.params.username;
