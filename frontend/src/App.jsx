@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TestButton from "./components/TestButton";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Transactions from "./pages/Transactions";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -17,6 +18,7 @@ function App() {
 		<Routes>
 	  		<Route path="/" element={<Login />} />
 			<Route path="/home" element={<Home />} />
+	  		<Route path="/transactions" element={<Transactions />} />
 		</Routes>
 	</BrowserRouter>
 	);

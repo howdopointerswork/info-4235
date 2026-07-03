@@ -17,4 +17,17 @@ model User{
 	username String
 	password String
 
+	transactions Transaction[]
+
+}
+
+
+model Transaction{
+	id Int @id @default(autoincrement())
+	amount Float
+	category String
+	type String
+	description String
+	userId Int
+	user User @relation(fields: [userId], references: [id])
 }
