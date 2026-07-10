@@ -33,11 +33,33 @@ function Login(){
 
 		if(res.success){
 			console.log("YES");
+			localStorage.setItem("userName", username);
 			navigate("/home");
 		}else{
 
 			console.log("NO");
 		}
+	}
+
+
+
+	async function getUser(username){
+
+		const resp = await fetch(`http://localhost:3000/User/${username}`);
+
+		const res = await resp.json();
+		
+	
+		localStorage.setItem("ID", res.id);
+
+
+
+	}
+	
+	if(username != ""){
+	
+		getUser(username);
+		
 	}
 
 

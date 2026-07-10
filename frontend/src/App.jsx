@@ -10,8 +10,11 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Transactions from "./pages/Transactions";
 
+
+
 function App() {
   const [count, setCount] = useState(0);
+  const [user, setUser] = useState(null);
 
   return (
 	<BrowserRouter>

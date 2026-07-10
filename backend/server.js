@@ -67,18 +67,93 @@ ex.post('/login', async (req, res) => {
 });
 
 
-ex.get('/User/username/:username', async (req, res) => {
+ex.put("/transaction/:id", async (req, res) => {
 
-	const username = req.params.username;
+
+	const { id, amount, category, type, description, userId } = req.body;
+
+	try{
+		const transaction = await prisma.transaction.update({
+			where: {
+				id: id,
+				userId: userId
+			},
+			data: {
+				amount: Number(amount),
+				category,
+				type,
+				description
+			}
+		});
+
+		res.json();
+
+		
+	}catch(error){
+		console.error(error);
+	}
+
+});
+				
+
+
+ex.delete("/transaction/:id", async (req, res) => {
+
+	const {id, userId} = req.body;
 
 	try{
 
+		const transaction = await prisma.transaction.findFirst({
+
+			where: {
+				id: id,
+				userId: userId
+			}
+		});
+		if(!transaction){
+
+			console.log("Failed to delete transaction");
+		}else{
+
+			console.log("Successfully deleted");
+		
+		
+
+		await prisma.transaction.delete({
+			where: {
+				id: id
+			}
+		});
+
+			res.json()
+
+		}
+
+	}catch(error){
+
+		console.error(error);
+	}
+
+});
+
+	
+
+
+ex.get('/User/:username', async (req, res) => {
+	
+	const { username } = req.params.username;
+
+
+	try{
 		const user = await prisma.User.findFirst({
-			where: { username }
+
+			where: { username: username }
+			
 		});
 		res.json(user);
 
 	}catch(error){
+		console.error(error);
 		res.status(500).json({ error: 'Error getting data' });
 	}
 
@@ -111,6 +186,21 @@ ex.post('/transaction', async (req, res) => {
 	console.error(error);	
 	res.status(500).json({ error: 'Error getting data' });
 }
+
+});
+
+
+ex.get("/transaction/:userId", async (req, res) => {
+
+	console.log("Found route");
+	const { userId } = req.params; 
+	
+	const transactions = await prisma.transaction.findMany({
+
+		where: { userId: Number(userId) },
+	});
+
+	res.json(transactions);
 
 });
 
