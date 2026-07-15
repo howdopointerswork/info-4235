@@ -9,8 +9,8 @@ function NavBar(){
 				
 			<Link to="/home">Home</Link>
 			<Link to="/transactions">Transactions</Link>
-			<Link to="/">Page2</Link>
-			<Link to="/">Page3</Link>
+			<Link to="/budgeting">Budgeting</Link>
+			<Link to="/investing">Investing</Link>
 			<Link to="/">Page4</Link>
 			
 		</nav>

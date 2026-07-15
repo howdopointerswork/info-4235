@@ -160,9 +160,29 @@ ex.get('/User/:username', async (req, res) => {
 });
 
 
+ex.get('/transaction/count/:userId', async (req, res) => {
+
+	const id = Number(req.params.userId);
+
+
+
+	const count = await prisma.transaction.count({
+
+		where: {
+			userId: id
+		}
+	});
+
+	res.json({
+
+		count: count
+	});
+
+});
+
+
 ex.post('/transaction', async (req, res) => {
-	console.log("here");
-	
+
 
 	const { amount, category, type, description } = req.body;
 	
@@ -199,8 +219,9 @@ ex.get("/transaction/:userId", async (req, res) => {
 
 		where: { userId: Number(userId) },
 	});
-
+	console.log(transactions);
 	res.json(transactions);
+
 
 });
 

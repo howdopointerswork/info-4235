@@ -1,10 +1,27 @@
-import "./Table.css"; 
+export async function rowCount(){
+		
+		const userID = Number(localStorage.getItem("ID"));
+		
+	
+		const resp = await fetch(`http://localhost:3000/transaction/count/${userID}`);
+
+		const res = await resp.json();
+
+		return res.count;	
+
+	}
+
+
+
+import "./Table.css";
 
 import { useState } from "react";
 import React from "react";
 
 
-function Table( { headers, transactions, setTransactions } ){
+
+
+function Table( { headers, transactions, setTransactions, restore, setRestore } ){
 	
 	const ID = Number(localStorage.getItem("ID"));
 
@@ -15,25 +32,51 @@ function Table( { headers, transactions, setTransactions } ){
 	const [newType, setNewType] = useState("");
 	const [newDescription, setNewDescription] = useState("");
 	const [newAmount, setNewAmount] = useState(0);
+
 	
-	
-	
+
 
 	async function fetchData(){
 		
 		const res = await fetch(`http://localhost:3000/transaction/${ID}`);
 		const data = await res.json();
-		console.log("uh oh");
+	
 		setTransactions(transactions);
 		
-	
-
 	}
 
 	async function updateTransaction(tID){
 		console.log("Update here");
 		console.log("TID: " + tID);
 
+		const removed = restore.filter(val => val.id !== tID);
+		setRestore(removed);
+		const removedT = transactions.filter(val => val.id !== tID);
+		setTransactions(removedT);
+
+			
+		const transaction = {
+
+			id: tID,
+			amount: Number(newAmount),
+			category: newCategory,
+			description: newDescription,
+			userId: Number(localStorage.getItem("ID")),
+			type: newType,
+			date: ""
+		};
+		
+	
+		restore.push(transaction);
+	
+		transactions.push(transaction);	
+	
+	
+
+	
+
+		
+	
 		const resp = await fetch(`http://localhost:3000/transaction/${tID}`,
 			{
 				method: "PUT",
@@ -54,16 +97,19 @@ function Table( { headers, transactions, setTransactions } ){
 			
 			});
 
-		setEditID(0);
-		fetchData();
-	}
+			setEditID(0);
+		}
 	
 	
 	async function deleteTransaction(tID){
 	
 		console.log("Deleting " + tID);
+		
+		const removed = restore.filter(val => val.id !== tID);
+		setRestore(removed);
+		const removedT = transactions.filter(val => val.id !== tID);
+		setTransactions(removedT);
 	
-
 		const resp = await fetch(`http://localhost:3000/transaction/${tID}`,
 			{
 				method: "DELETE",
@@ -79,8 +125,8 @@ function Table( { headers, transactions, setTransactions } ){
 			}
 
 		);
-
-		fetchData();
+		
+		
 
 			
 
@@ -104,7 +150,12 @@ function Table( { headers, transactions, setTransactions } ){
 			transaction.category = "housing";
 
 		}
+
+		if(transaction.date == ""){
+			transaction.date = new Date();
+		}
 	}
+
 
 
 
@@ -126,6 +177,7 @@ function Table( { headers, transactions, setTransactions } ){
 				<React.Fragment key={transaction.id}>	
 				<tr>
 					<td>{transaction.id}</td>
+					<td>{transaction.date}</td>
 					<td>{transaction.category}</td>
 					<td>{transaction.type}</td>
 					<td>{transaction.description}</td>
@@ -138,7 +190,8 @@ function Table( { headers, transactions, setTransactions } ){
 				<tr>
 
 
-					<td></td>	
+					<td></td>
+					<td></td>
 					<td><select value={newCategory} onChange={(e) => setNewCategory(e.target.value)}>
 										
 						<option value="housing">Housing</option>

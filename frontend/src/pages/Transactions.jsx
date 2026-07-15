@@ -3,7 +3,7 @@ import Button from '../components/Button.jsx';
 import Table from '../components/Table.jsx';
 
 import "./Transactions.css";
-
+import { rowCount } from "../components/Table.jsx";
 import { useState, useEffect } from "react";
 
 function Transactions(){
@@ -20,14 +20,17 @@ function Transactions(){
 	const [sortBy, setSortBy] = useState("amount");
 	const [orderBy, setOrderBy] = useState("ascending");
 	const [query, setQuery] = useState("");
+	const [restore, setRestore] = useState([]);
+	const [flag, setFlag] = useState(true);
 
 
-	const headers = ["ID", "Category", "Type", "Description", "Amount"];
+	const headers = ["ID", "Date", "Category", "Type", "Description", "Amount"];
 
 	const user = localStorage.getItem("userName");
 	const ID = localStorage.getItem("ID");
 	let copyTransactions = [...transactions];
-	let returnTransactions = [];
+
+
 	
 
 	async function getUser(username){
@@ -54,6 +57,7 @@ async function reset(){
 	const data = await res.json();
 
 	setTransactions(data);
+
 }
 
 
@@ -63,24 +67,26 @@ async function reset(){
 useEffect(() => {
 	async function fetchData() {
 	
-	
 		getUser(user);	
 		setID(Number(localStorage.getItem("ID")));
-		
-	
-	
-		
+			
 		const res = await fetch(`http://localhost:3000/transaction/${ID}`);
 		const data = await res.json();
 
 		setTransactions(data);
 	
+
+
 	
 		}
 
 	fetchData();
 
+
+
 }, []);
+
+
 
 
 	async function search(e){
@@ -88,28 +94,26 @@ useEffect(() => {
 		e.preventDefault();
 
 		console.log("Searching...");
-		
-	
-
-	
 			
+	
+
 		copyTransactions = [];
-		
-		returnTransactions = [];
 
 
 		
+			
+	
 
-		for(const transaction of [...transactions]){
+		for(const transaction of restore){
 			if(transaction.category.includes(query) || 
 				transaction.type.includes(query) || 
 				transaction.amount.toString().includes(query) ||
 				transaction.description.includes(query) ||
-				transaction.id.toString().includes(query)){
+				transaction.id.toString().includes(query) ||
+				transaction.date.toString().includes(query)){
 			
 				copyTransactions.push(transaction);	
 			}else{
-				returnTransactions.push(transaction);
 				console.log("oops!");
 			}
 		}
@@ -120,7 +124,12 @@ useEffect(() => {
 			reset();
 		}	
 	}
-		
+	
+
+
+
+
+
 	async function sortArray(e){
 		e.preventDefault();
 	
@@ -165,6 +174,18 @@ useEffect(() => {
 				copyTransactions = [...transactions].sort((a,b) => a.type.localeCompare(b.type));
 				setTransactions(copyTransactions);
 			}
+
+			if(sortBy == "date" && orderBy == "ascending"){
+				
+				copyTransactions = [...transactions].sort((a,b) => a.date.toString().localeCompare(b.date.toString()));
+				console.log("working...");
+				setTransactions(copyTransactions);
+
+			}else if(sortBy == "date" && orderBy == "descending"){
+				console.log("also working...");
+				copyTransactions = [...transactions].sort((a,b) => b.date.toString().localeCompare(a.date.toString()));
+				setTransactions(copyTransactions);
+			}
 		}
 	}
 
@@ -172,8 +193,9 @@ useEffect(() => {
 	async function addTransaction(e){
 		
 		e.preventDefault();
-		
-	
+			
+		console.log("adding...");
+
 		const resp = await fetch(
 			"http://localhost:3000/transaction",
 			{
@@ -187,6 +209,7 @@ useEffect(() => {
 					type: type,
 					description: desc
 					
+					
 
 				}),
 					
@@ -199,17 +222,32 @@ useEffect(() => {
 		setTransactions(prev => [
 		...prev, res
 		]);
+
+		setRestore(prev => [...prev, res]);
 			
 		
 
 	}
 
 
-	
-
 
 	
+
 	
+		
+	console.log("Size here: " + transactions.length);
+	rowCount().then(newCount => {
+		setCount(newCount);	
+	});
+	console.log("Row count: " + count);
+
+	if(transactions.length > 0 && count > 0 && flag){
+
+			if(transactions.length == count){
+			setRestore(transactions);
+			setFlag(false);
+		}
+	}
 
 
 	return (
@@ -243,6 +281,7 @@ useEffect(() => {
 					<option value="id">ID</option>
 					<option value="category">Category</option>
 					<option value="type">Type</option>
+					<option value="date">Date</option>
 				</select>
 
 				<select id="order" value={orderBy} onChange={(e) => setOrderBy(e.target.value)}>
@@ -317,7 +356,7 @@ useEffect(() => {
 			</form>
 
 
-			<Table headers={headers} transactions={copyTransactions} setTransactions={setTransactions} id="transactionsTable"/>
+			<Table headers={headers} transactions={copyTransactions} setTransactions={setTransactions} restore={restore} setRestore={setRestore} id="transactionsTable"/>
 
 		</div>
 	);
