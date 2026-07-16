@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+
 console.log(process.env.DATABASE_URL);
 
 const { PrismaClient } = require('@prisma/client');
@@ -12,6 +13,8 @@ const cors = require('cors');
 const ex  = express();
 const port = 3000;
 var id = 0;
+const popular = ["AAPL", "MSFT", "NVDA", "AMZN", "TSLA", "GOOGL"];
+
 
 ex.use(cors());
 
@@ -19,10 +22,13 @@ ex.use(express.static(__dirname));
 ex.use(express.json());
 
 
+
+
 ex.post('/login', async (req, res) => {
 
 	const { username, password } = req.body;
 	 
+
 
 	try{
 
@@ -227,6 +233,109 @@ ex.get("/transaction/:userId", async (req, res) => {
 
 
 
+ex.get('/stock/history/:symbol', async (req, res) => {
+
+		const symbol = req.params.symbol.toUpperCase();
+
+	
+
+	try{
+
+		const resp = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`);
+
+		const data = await resp.json();
+
+		console.log(data);
+
+		res.json(data);
+		
+		
+
+		
+	}catch(err){
+		console.error(err);
+		res.status(500).json({ err: "Failed to retrieve history"  });
+	}
+
+});
+
+
+//for testing API
+ex.get('/stock/:symbol', async (req, res) => {
+	
+	try{
+		const symbol = req.params.symbol.toUpperCase();
+
+		const resp = await fetch(
+			`http://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`
+		);
+
+		const data = await resp.json();
+
+		res.json(data);
+
+		
+	}catch(err){
+		console.error(err);
+	}
+
+});
+
+
+ex.get('/stock/profile/:symbol', async (req, res) => {
+
+	try{
+		const symbol = req.params.symbol.toUpperCase();
+
+		const resp = await fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`);
+
+		const data = await resp.json();
+
+		res.json(data);
+
+	}catch(err){
+		console.error(err);
+	}
+
+
+});
+
+
+ex.get('/stocks/popular', async (req, res) => {
+	console.log("testing...");
+	try{
+		
+		const stocks = [];
+
+
+		for(const symbol of popular){
+
+			const resp = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`);
+			const data = await resp.json();
+			
+		//	console.log(symbol, data);
+
+			stocks.push({
+
+				symbol: symbol,
+				price: data.c,
+				change: data.d,
+				percentChange: data.dp
+			});
+		}
+	
+		res.json(stocks);
+
+	}catch(err){
+		console.error(err);
+	}
+
+});
+
+
+
+
+
 ex.post('/User', async (req, res) => {
 
 	const { username, password } = req.body;
@@ -249,6 +358,7 @@ ex.post('/User', async (req, res) => {
 ex.listen(port, () => {
 
 	console.log("Server is running");
+
 
 });
 

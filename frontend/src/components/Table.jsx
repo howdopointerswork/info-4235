@@ -242,12 +242,12 @@ function Table( { headers, transactions, setTransactions, restore, setRestore } 
 					</td>
 					
 					<td>
-						<button onClick={() => setEditID(0)}>Cancel</button>
+						<button className="editButtons" onClick={() => setEditID(0)}>Cancel</button>
 					</td>
 				
 
 					<td>
-						<button onClick={() => updateTransaction(transaction.id)}>Update</button>
+						<button className="deleteButtons" onClick={() => updateTransaction(transaction.id)}>Update</button>
 					</td>
 			
 			

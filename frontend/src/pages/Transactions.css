@@ -1,3 +1,5 @@
+
+
 #addTransaction{
 	list-style-type: none;
 	display: flex;
@@ -19,6 +21,6 @@
 
 #transactionsTable{
 
-	border: 2px solid black;
+	border: 4px solid white;
 	color: red;
 }

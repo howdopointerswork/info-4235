@@ -1,0 +1,20 @@
+/*the list*/
+.popular{
+
+	list-style-type: none;
+	display: flex;
+	flex-direction: horizontal;
+	justify-content: center;
+	
+
+	li{
+		padding: 0.5em;
+
+	}
+}
+
+/*the div*/
+.pop{
+
+
+}
