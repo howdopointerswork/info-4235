@@ -16,7 +16,8 @@ model User{
 	id Int @id @default(autoincrement())
 	username String
 	password String
-
+	target Float @default(0)
+	stocks Stock[]
 	transactions Transaction[]
 
 }
@@ -32,5 +33,16 @@ model Transaction{
 	date DateTime @default(now())
 	user User @relation(fields: [userId], references: [id])
 
+
+}
+
+
+model Stock{
+	id Int @id @default(autoincrement())
+	price Int
+	shares Int
+	symbol String
+	userId Int
+	user User @relation(fields: [userId], references: [id])
 
 }

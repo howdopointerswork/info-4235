@@ -15,6 +15,32 @@
 
 /*the div*/
 .pop{
+	height: 400px;
+	overflow-y: auto;
 
+}
 
+.gridView{
+
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 2em;
+	
+}
+
+.profile{
+
+	margin: 0 auto;
+	text-align: center;
+}
+
+.stats{
+
+	background-color: #111111;
+}
+
+.feed{
+
+	height: 400px;
+	overflow-y: auto;
 }

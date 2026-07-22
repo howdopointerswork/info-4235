@@ -1,0 +1,30 @@
+
+.head{
+	ul{
+		list-style-type: none;
+		display: block;
+	
+		li{
+		
+			display:inline;
+		
+		}
+
+
+	}
+}
+
+.signedIn{
+	float: left;
+}
+
+.profile{
+	float: right;
+	margin-right: 4em;
+}
+
+.logo{
+
+	margin-right: 4em;
+	width: 50px;
+}

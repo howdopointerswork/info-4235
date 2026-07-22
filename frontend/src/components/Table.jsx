@@ -177,13 +177,13 @@ function Table( { headers, transactions, setTransactions, restore, setRestore } 
 				<React.Fragment key={transaction.id}>	
 				<tr>
 					<td>{transaction.id}</td>
-					<td>{transaction.date}</td>
+					<td>{transaction.date.toString().slice(0,10)}<br/>{transaction.date.toString().slice(12,16)}</td>
 					<td>{transaction.category}</td>
-					<td>{transaction.type}</td>
+					<td style={{ color: transaction.type == "income" ? "green" : "red" }}>{transaction.type}</td>
 					<td>{transaction.description}</td>
-					<td>{transaction.amount}</td>
-					<td><button onClick={() => setEditID(transaction.id)}>Edit</button></td> 
-					<td><button onClick={() => deleteTransaction(transaction.id)}>Delete</button></td>
+					<td>${transaction.amount}</td>
+					<td><button style={{ backgroundColor: "#999999", color: "black", fontWeight: "bold" }} onClick={() => setEditID(transaction.id)}>Edit</button></td> 
+					<td><button style={{ backgroundColor: "#444444", color: "black", fontWeight: "bold" }} onClick={() => deleteTransaction(transaction.id)}>Delete</button></td>
 				</tr>
 				
 				{editID == transaction.id && (

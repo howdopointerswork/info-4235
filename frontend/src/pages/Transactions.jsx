@@ -13,7 +13,7 @@ function Transactions(){
 	const [amount, setAmount] = useState("");
 	const [desc, setDesc] = useState("");
 	const [active, setActive] = useState(false);
-	const [text, setText] = useState("New Transaction");
+	const [text, setText] = useState("+ Add");
 	const [transactions, setTransactions] = useState([]);
 	const [id, setID] = useState(0);
 	const [count, setCount] = useState(0);
@@ -24,7 +24,7 @@ function Transactions(){
 	const [flag, setFlag] = useState(true);
 
 
-	const headers = ["ID", "Date", "Category", "Type", "Description", "Amount"];
+	const headers = ["ID", "Date", "Category", "Type", "Notes", "Amount"];
 
 	const user = localStorage.getItem("userName");
 	const ID = localStorage.getItem("ID");
@@ -251,54 +251,22 @@ useEffect(() => {
 
 
 	return (
+
+		<body>
 		
-		<div>
-			<h1>Transactions</h1>
+		<div id="transactionsButtons">
 			<NavBar />
-
-			
-				
-			<button onClick={() => {setActive(!active); active ? setText("New Transaction") : setText("Cancel");}}
-			>{ text }</button>
-
-
-
-			<input type="file" name="import" id="import"/>
-					
-			<p>Total: { transactions.length }</p>
-
-
-
-			<form onSubmit={search}>
-				<input type="text" placeholder="Search" onChange={(e) => setQuery(e.target.value)}/>		
-			</form>
-
-			<form onSubmit={sortArray}>
-				<label htmlFor="sort">Sort By: </label>
 		
-				<select id="sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-					<option value="amount">Amount</option>
-					<option value="id">ID</option>
-					<option value="category">Category</option>
-					<option value="type">Type</option>
-					<option value="date">Date</option>
-				</select>
+		
 
-				<select id="order" value={orderBy} onChange={(e) => setOrderBy(e.target.value)}>
-					<option value="ascending">Ascending</option>
-					<option value="descending">Descending</option>
+			<input id="import" type="file" name="import" id="import"/>
 
-				</select>	
-
-
-				<button type="submit">Filter</button>
-
-			</form>
-
-
-
-				<button onClick={() => reset()}>Reset</button>
-
+			<div>
+				
+			<button id="new" onClick={() => {setActive(!active); active ? setText("+ Add") : setText("Cancel");}} 		
+			>{ text }</button>					
+		
+			
 
 
 			
@@ -356,9 +324,41 @@ useEffect(() => {
 			</form>
 
 
+
+
+		<form onSubmit={search}>
+				<input id="search" type="text" placeholder="Search" onChange={(e) => setQuery(e.target.value)}/>		
+			</form>
+
+			<form onSubmit={sortArray}>
+				<label htmlFor="sort">Sort By: </label>
+		
+				<select id="sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+					<option value="amount">Amount</option>
+					<option value="id">ID</option>
+					<option value="category">Category</option>
+					<option value="type">Type</option>
+					<option value="date">Date</option>
+				</select>
+
+				<select id="order" value={orderBy} onChange={(e) => setOrderBy(e.target.value)}>
+					<option value="ascending">Ascending</option>
+					<option value="descending">Descending</option>
+
+				</select>	
+				<button type="submit">Filter</button>
+					<button onClick={() => reset()}>Reset</button>
+			</form>
+
+			
+		</div>
+
+
 			<Table headers={headers} transactions={copyTransactions} setTransactions={setTransactions} restore={restore} setRestore={setRestore} id="transactionsTable"/>
 
 		</div>
+
+		</body>
 	);
 }
 
